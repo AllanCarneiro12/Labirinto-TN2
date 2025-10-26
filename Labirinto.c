@@ -1,6 +1,11 @@
 // Desenvolvido por Alessandro João Brassanini
 // Data: 04 de Dezembro de 2023
 
+// Editado por:     Allan Carneiro da Cunha Silveira
+//                  Isadora Voss Brugnera
+//                  Jenifer Beatriz Nunes Ribeiro
+// Data: 06 de Junho de 2024
+
 /*
 Uso de matriz bidimensional (5x5) para armazenar o cenário.
 Laços de repetição para imprimir o labirinto a cada rodada.
@@ -26,6 +31,41 @@ P - posição atual do jogador.
 0 - caminho livre.
 1 - parede (não pode atravessar).
 S - saída (objetivo do jogo).
+
+*/
+
+/*PARA FAZER:
+
+01 - Aumentar o tamanho do labirinto de 5x5 para 10x10
+02 - Usar emojis ou caracteres ASCII diferentes (@ para
+jogador, X para parede, O para saída).
+Usar a criatividade.
+03 - Recursos de som
+Usar Beep(frequencia, duracao) com mais efeitos.
+Diferenciar sons de parede, movimento e vitória.
+Criar sons personalizados para cada tipo de movimento.
+Exemplo: Som mais rápido ao andar, som longo ao bater na
+parede.
+Trabalho da N2 – peso 3
+04 - Adicionar contador de passos ou movimentos.
+Exemplo: mostrar quantos movimentos o jogador fez até a
+vitória.
+05 - Adicionar sistema de pontuação.
+Exemplo: Pontos para cada movimento correto, penalidades
+ao bater na parede.
+Usar a criatividade.
+06 - Adicionar armadilhas ou “buracos”.
+Trabalho da N2 – peso 3
+07 - Realizar melhoria da estrutura do código.
+Modularização usando funções:
+Exemplo: void mostrarLabirinto(), int validarMovimento(),
+void tocarSom().
+Objetivo é incentivar programação estruturada e
+reaproveitamento de código.
+08 - Mostrar coordenadas (linha/coluna) para jogadores.
+Exemplo: Mostrar a linha e coluna em que esta na hora de
+navegar.
+09 - Adicionar cores no joguinho.
 
 */
 
