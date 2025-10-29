@@ -74,18 +74,23 @@ navegar.
 #include <ctype.h>    // Para toupper (converter comandos)
 #include <windows.h>  // Para Beep()
 
-#define N 5 // Tamanho da matriz do labirinto
+#define N 10// Tamanho da matriz do labirinto
 
 int main()
 {
     // Matriz do labirinto: 0 = caminho, 1 = parede, -1 = saída
     int labirinto[N][N] =
     {
-        {0, 1, 0, 0, 0},
-        {0, 1, 0, 1, 0},
-        {0, 0, 0, 1, 0},
-        {1, 1, 0, 1, 0},
-        {0, 0, 0, 0, -1}
+        {0, 1, 0, 0, 1, 0, 0, 0, 0, 0},
+        {0, 1, 0, 1, 1, 0, 1, 0, 1, 0},
+        {0, 0, 0, 1, 0, 0, 1, 0, 1, 0},
+        {1, 1, 0, 1, 0, 1, 1, 0, 1, 1},
+        {0, 1, 0, 1, 0, 0, 1, 0, 0, 0},
+        {0, 0, 0, 0, 0, 1, 0, 1, 0, 1},
+        {0, 1, 1, 1, 0, 0, 0, 0, 0, 0},
+        {0, 1, 0, 1, 0, 1, 0, 1, 1, 0},
+        {0, 1, 0, 1, 0, 1, 0, 0, 0, 1},
+        {0, 0, 0, 1, 1, 1, 1, 1, 0, -1}
     };
 
     int x = 0, y = 0;      // Posição inicial do jogador
@@ -97,7 +102,7 @@ int main()
         system("cls"); // Limpa a tela no Windows
 
         // Mostra o labirinto
-        printf("Jogo do Labirinto 5x5 com Som\n");
+        printf("Jogo do Labirinto 10x10 com Som\n");
         printf("Use W (cima), S (baixo), A (esquerda), D (direita)\n");
         printf("Objetivo: chegar na saida (S)\n\n");
 
@@ -108,19 +113,19 @@ int main()
             {
                 if (i == x && j == y)
                 {
-                    printf("P "); // Jogador
+                    printf(":)"); // Jogador
                 }
                 else if (labirinto[i][j] == 1)
                 {
-                    printf("# "); // Parede
+                    printf("X "); // Parede
                 }
                 else if (labirinto[i][j] == -1)
                 {
-                    printf("S "); // Saída
+                    printf("O"); // Saída
                 }
                 else
                 {
-                    printf(". "); // Caminho livre
+                    printf("* "); // Caminho livre
                 }
             }
             printf("\n");
