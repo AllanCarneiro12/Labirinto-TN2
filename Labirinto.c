@@ -76,6 +76,67 @@ navegar.
 
 #define N 10// Tamanho da matriz do labirinto
 
+//---------------------------------FUNÇÕES------------------------------------------
+//Mostrar o labirinto
+void mostrarLabirinto(int matriz[N][N], int x, int y){
+    printf("Jogo do Labirinto 10x10 com Som!\n");
+        printf("Use W (cima), S (baixo), A (esquerda), D(direita)\n");
+        printf("Objetivo: chegar na saida (S)\n\n");
+
+        int i, j;
+        for (i = 0; i < N; i++)
+        {
+            for (j = 0; j < N; j++)
+            {
+                if (i == x && j == y)
+                {
+                    printf(":)"); // Jogador
+                }
+                else if (matriz[i][j] == 1)
+                {
+                    printf("X "); // Parede
+                }
+                else if (matriz[i][j] == -1)
+                {
+                    printf("O"); // Saída
+                }
+                else
+                {
+                    printf("* "); // Caminho livre
+                }
+            }
+            printf("\n");
+        }
+        
+}
+
+
+//Validar movimento
+int validarMovimento(int novoX, int novoY, int matriz[N][N]){
+   if (novoX >= 0 && novoX < N && novoY >= 0 && novoY < N && matriz[novoX][novoY] != 1){
+    return 1;
+   }
+   else{
+    return 0;
+   }
+    }
+
+//tocar som
+void tocarSomVitoria()
+{
+    Beep(1000, 300);
+    Beep(1500, 300);
+    Beep(2000, 500);
+}
+void tocarSomMovimento()
+{
+    Beep(750, 100);
+}
+void tocarSomErro()
+{
+    Beep(400, 300);
+}
+//-------------------------------------MAIN-----------------------------------------
 int main()
 {
     // Matriz do labirinto: 0 = caminho, 1 = parede, -1 = saída
@@ -94,7 +155,7 @@ int main()
     };
 
     int x = 0, y = 0;      // Posição inicial do jogador
-    char comando;          // Entrada do usuário
+    char comando;
     int jogando = 1;       // Controle do loop do jogo
 
     while (jogando)
@@ -102,43 +163,14 @@ int main()
         system("cls"); // Limpa a tela no Windows
 
         // Mostra o labirinto
-        printf("Jogo do Labirinto 10x10 com Som\n");
-        printf("Use W (cima), S (baixo), A (esquerda), D (direita)\n");
-        printf("Objetivo: chegar na saida (S)\n\n");
-
-        int i, j;
-        for (i = 0; i < N; i++)
-        {
-            for (j = 0; j < N; j++)
-            {
-                if (i == x && j == y)
-                {
-                    printf(":)"); // Jogador
-                }
-                else if (labirinto[i][j] == 1)
-                {
-                    printf("X "); // Parede
-                }
-                else if (labirinto[i][j] == -1)
-                {
-                    printf("O"); // Saída
-                }
-                else
-                {
-                    printf("* "); // Caminho livre
-                }
-            }
-            printf("\n");
-        }
+        mostrarLabirinto(labirinto,x, y);
 
         // Verifica se o jogador chegou a saída
         if (labirinto[x][y] == -1)
         {
             printf("\nParabens! Voce encontrou a saida!\n");
             // Som de vitória: frequência alta
-            Beep(1000, 300);
-            Beep(1500, 300);
-            Beep(2000, 500);
+            tocarSomVitoria();
             break;
         }
 
@@ -150,6 +182,7 @@ int main()
         int novoX = x;
         int novoY = y;
 
+        
         if (comando == 'W')
         {
             novoX--;
@@ -171,20 +204,15 @@ int main()
             printf("Comando invalido!\n");
         }
 
-        // Verifica se a nova posição é válida
-        if (novoX >= 0 && novoX < N && novoY >= 0 && novoY < N && labirinto[novoX][novoY] != 1)
-        {
-            x = novoX;
-            y = novoY;
-            // Som de movimento: frequência média e curto
-            Beep(750, 100);
-        }
-        else
-        {
-            printf("Movimento invalido! Parede ou fora dos limites!\n");
-            // Som de erro: frequência baixa e longo
-            Beep(400, 300);
-        }
+       if(validarMovimento(novoX, novoY,labirinto) == 1){
+        x = novoX;
+        y = novoY;
+        tocarSomMovimento();
+       }
+       else{
+        printf("Movimento invalido! Parede ou fora dos limites!\n");
+        tocarSomErro();
+       }
     }
 
     return 0;
