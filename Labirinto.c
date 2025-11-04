@@ -76,6 +76,9 @@ navegar.
 
 #define N 10// Tamanho da matriz do labirinto
 
+int movimentos = 0; // Declarando variveis para contagem dos movimentos
+int pontos = 0;     // e para a contagem de pontos
+
 int main()
 {
     // Matriz do labirinto: 0 = caminho, 1 = parede, -1 = saída
@@ -104,7 +107,9 @@ int main()
         // Mostra o labirinto
         printf("Jogo do Labirinto 10x10 com Som\n");
         printf("Use W (cima), S (baixo), A (esquerda), D (direita)\n");
-        printf("Objetivo: chegar na saida (S)\n\n");
+        printf("Objetivo: chegar na saida (S)\n");
+        printf("Pontuação: %d\n", pontos);
+        printf("Total de movimentos: %d\n\n", movimentos);
 
         int i, j;
         for (i = 0; i < N; i++)
@@ -135,6 +140,7 @@ int main()
         if (labirinto[x][y] == -1)
         {
             printf("\nParabens! Voce encontrou a saida!\n");
+            printf("\nVoce fez %d pontos em %d movimentos!", pontos, movimentos);
             // Som de vitória: frequência alta
             Beep(1000, 300);
             Beep(1500, 300);
@@ -169,22 +175,26 @@ int main()
         else
         {
             printf("Comando invalido!\n");
-        }
+        } 
 
         // Verifica se a nova posição é válida
         if (novoX >= 0 && novoX < N && novoY >= 0 && novoY < N && labirinto[novoX][novoY] != 1)
         {
             x = novoX;
             y = novoY;
+            movimentos++; // Para contar os movimentos
+            pontos += 10; // A cada passo dado o player ganha 10 pontos
             // Som de movimento: frequência média e curto
             Beep(750, 100);
-        }
-        else
+        } 
+         else
         {
             printf("Movimento invalido! Parede ou fora dos limites!\n");
+            pontos -= 5; // A cada movimentos invalido o player perde 5 pontos
             // Som de erro: frequência baixa e longo
             Beep(400, 300);
         }
+        
     }
 
     return 0;
