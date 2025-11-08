@@ -91,9 +91,9 @@ void mostrarLabirinto(int matriz[N][N], int x, int y, int pontos)
     {
         for (int j = 0; j < N; j++)
         {
-            if (i == x && j == y)           printf("\x1b[33m@\x1b[0m "); // Jogador
+            if (i == x && j == y)           printf("\x1b[33m:)\x1b[0m"); // Jogador
             else if (matriz[i][j] == 1)     printf("\x1b[31mX\x1b[0m "); // Parede
-            else if (matriz[i][j] == -1)    printf("\x1b[32mO\x1b[0m "); // Saída
+            else if (matriz[i][j] == -1)    printf("\x1b[32m[]\x1b[0m"); // Saída
             else                            printf("\x1b[34m.\x1b[0m "); // Caminho
         }
         printf("\n");
@@ -143,6 +143,7 @@ void tocarSomErro()
     Beep(250, 100);
     Sleep(50);
     Beep(250, 100);
+    Sleep(300);
 }
 
 //-------------------------------------MAIN-----------------------------------------
@@ -157,7 +158,7 @@ int main()
             {0, 0, 0, 1, 0, 0, 1, 0, 1, 0},
             {1, 1, 0, 1, 0, 1, 1, 0, 1, 1},
             {0, 1, 0, 1, 0, 0, 1, 0, 0, 0},
-            {0, 0, 0, 0, 0, 1, 0, 1, 0, 1},
+            {0, 0, 0, 0, 0, 1, 1, 1, 1, 0},
             {0, 1, 1, 1, 0, 0, 0, 0, 0, 0},
             {0, 1, 0, 1, 0, 1, 0, 1, 1, 0},
             {0, 1, 0, 1, 0, 1, 0, 0, 0, 1},
@@ -170,10 +171,10 @@ int main()
     while (jogando)
     {
         system("cls"); // Limpa a tela no Windows
-
+        
         // Mostra o labirinto
         mostrarLabirinto(labirinto, x, y, pontos);
-
+        
         // Verifica se o jogador chegou a saída
         if (labirinto[x][y] == -1)
         {
@@ -184,11 +185,19 @@ int main()
             tocarSomVitoria();
             break;
         }
-
+        
         // Entrada de movimento
+
         printf("\nDigite seu movimento (W/A/S/D): ");
         scanf(" %c", &comando);
         comando = toupper(comando); // Normaliza para maiúscula
+        // Verifica tecla válida
+        if (comando != 'W' && comando != 'A' && comando != 'S' && comando != 'D')
+        {
+            printf("Comando invalido! Use W, A, S ou D.\n");
+            tocarSomErro();
+            continue;            
+        }        
 
         int novoX = x;
         int novoY = y;
