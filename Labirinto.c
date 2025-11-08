@@ -83,26 +83,23 @@ int pontos = 0;     // e para a contagem de pontos
 // Mostrar o labirinto
 void mostrarLabirinto(int matriz[N][N], int x, int y, int pontos)
 {
-    printf("Jogo do Labirinto 10x10 com Som!\n");
+    printf("\x1b[1;37mJogo do Labirinto 10x10 com Som!\x1b[0m\n");
     printf("Use W (cima), S (baixo), A (esquerda), D(direita)\n");
-    printf("Objetivo: chegar na saida (S)\n\n");
+    printf("Objetivo: chegar na saida (\x1b[32mS\x1b[0m)\n\n");
 
-    int i, j;
-
-    for (i = 0; i < N; i++)
+    for (int i = 0; i < N; i++)
     {
-        for (j = 0; j < N; j++)
+        for (int j = 0; j < N; j++)
         {
-            if (i == x && j == y)           printf(":)"); // Jogador
-            else if (matriz[i][j] == 1)     printf("X "); // Parede
-            else if (matriz[i][j] == -1)    printf("O "); // Saída
-            else                            printf("* "); // Caminho livre
+            if (i == x && j == y)           printf("\x1b[33m@\x1b[0m "); // Jogador
+            else if (matriz[i][j] == 1)     printf("\x1b[31mX\x1b[0m "); // Parede
+            else if (matriz[i][j] == -1)    printf("\x1b[32mO\x1b[0m "); // Saída
+            else                            printf("\x1b[34m.\x1b[0m "); // Caminho
         }
         printf("\n");
     }
-    // Mostrar coordenadas
-    printf("\nPosicao atual do jogador: (%d, %d)\n", x, y);
-    printf("Pontuacao: %d", pontos);
+    printf("\nPosicao: (\x1b[36m%d\x1b[0m, \x1b[36m%d\x1b[0m)\n", x, y);
+    printf("Pontuacao: \x1b[35m%d\x1b[0m\n", pontos);
 }
 
 // Validar movimento
@@ -121,17 +118,31 @@ int validarMovimento(int novoX, int novoY, int matriz[N][N])
 // tocar som
 void tocarSomVitoria()
 {
-    Beep(1000, 300);
-    Beep(1500, 300);
-    Beep(2000, 500);
+    Beep(659, 140);  Sleep(30);  // E5
+    Beep(784, 140);  Sleep(30);  // G5
+    Beep(1047, 260); Sleep(60);  // C6 (sustentado)
+    Beep(880, 180);  Sleep(40);  // A5
+    Beep(784, 140);  Sleep(30);  // G5
+    Beep(659, 140);  Sleep(30);  // E5
+    Beep(523, 140);  Sleep(30);  // C5
+    Beep(659, 260);  Sleep(60);  // E5 (resolucao)
+    // Flourish final
+    Beep(1047, 180); Sleep(40);  // C6
+    Beep(1319, 180); Sleep(40);  // E6
+    Beep(1568, 320);             // G6 (final)
+    // Beep(1000, 300);
+    // Beep(1500, 300);
+    // Beep(2000, 500);
 }
 void tocarSomMovimento()
 {
-    Beep(750, 100);
+    Beep(500, 100);
 }
 void tocarSomErro()
 {
-    Beep(400, 300);
+    Beep(250, 100);
+    Sleep(50);
+    Beep(250, 100);
 }
 
 //-------------------------------------MAIN-----------------------------------------
