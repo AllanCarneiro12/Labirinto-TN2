@@ -194,7 +194,7 @@ int main()
         // Verifica tecla válida
         if (comando != 'W' && comando != 'A' && comando != 'S' && comando != 'D')
         {
-            printf("Comando invalido! Use W, A, S ou D.\n");
+            printf("\x1b[31mComando invalido! Use W, A, S ou D.\x1b[0m\n");
             tocarSomErro();
             continue;            
         }        
@@ -217,8 +217,8 @@ int main()
         }
         else
         {
-            printf("Movimento invalido! Parede ou fora dos limites!\n");
-            printf("Perdeu 5 pontos :(\n");
+            printf("\x1b[31mMovimento invalido! Parede ou fora dos limites!\x1b[0m\n");
+            printf("\x1b[31mPerdeu 5 pontos :(\x1b[0m\n");
             tocarSomErro();
             pontos -= 5;
         }
