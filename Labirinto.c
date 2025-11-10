@@ -81,7 +81,7 @@ int pontos = 0;     // e para a contagem de pontos
 
 //---------------------------------FUNÇÕES------------------------------------------
 // Mostrar o labirinto
-void mostrarLabirinto(int matriz[N][N], int x, int y, int pontos)
+void mostrarLabirinto(int matriz[N][N], int x, int y, int movimentos)
 {
     printf("\x1b[1;37mJogo do Labirinto 10x10 com Som!\x1b[0m\n");
     printf("Use W (cima), S (baixo), A (esquerda), D(direita)\n");
@@ -100,7 +100,7 @@ void mostrarLabirinto(int matriz[N][N], int x, int y, int pontos)
         printf("\n");
     }
     printf("\nPosicao: (\x1b[36m%d\x1b[0m, \x1b[36m%d\x1b[0m)\n", x, y);
-    printf("Pontuacao: \x1b[35m%d\x1b[0m\n", pontos);
+    printf("Movimentos: \x1b[35m%d\x1b[0m\n", movimentos);
 }
 
 // Validar movimento
@@ -174,7 +174,7 @@ int main()
             {0, 1, 0, 1, 0, 0, 2, 0, 0, 0},
             {0, 0, 0, 0, 0, 1, 1, 1, 1, 0},
             {0, 1, 1, 1, 0, 2, 0, 0, 0, 0},
-            {0, 1, 0, 2, 0, 1, 0, 1, 1, 0},
+            {0, 1, 0, 2, 0, 1, 0, 1, 1, 1},
             {0, 1, 0, 1, 0, 1, 0, 0, 0, 1},
             {0, 0, 0, 1, 0, 2, 0, 1, 0, -1}};
 
@@ -182,19 +182,21 @@ int main()
     char comando;
     int jogando = 1;
     int pontos = 0; // Controle do loop do jogo
+    int movimentos = 0; // Contador de movimentos
     while (jogando)
     {
         system("cls"); // Limpa a tela no Windows
         
         // Mostra o labirinto
-        mostrarLabirinto(labirinto, x, y, pontos);
+        mostrarLabirinto(labirinto, x, y, movimentos);
         
         // Verifica se o jogador chegou a saída
         if (labirinto[x][y] == -1)
         {
-            pontos += 50;
-            printf("\nParabens! Voce encontrou a saida! Ganhe mais 50 :D \n");
-            printf("Total de pontos: %d", pontos);
+            pontos -= 340;
+            printf("\nParabens! Voce encontrou a saida!\n");
+            printf("\x1b[1;32mVoce venceu em %d movimentos!\x1b[0m\n", movimentos);
+            printf("\nTotal de pontos: \x1b[33m%d\x1b[0m\n", (2000 - pontos));
             // Som de vitória: frequência alta
             tocarSomVitoria();
             break;
@@ -203,13 +205,13 @@ int main()
         // Entrada de movimento
 
         printf("\nDigite seu movimento (W/A/S/D): ");
-        scanf(" %c", &comando);
+        comando = getch();
         comando = toupper(comando); // Normaliza para maiúscula
         // Verifica tecla válida
-        if (comando != 'W' && comando != 'A' && comando != 'S' && comando != 'D')
+        if (comando != 'W' && comando != 'A' && comando != 'S' && comando != 'D' && comando != 'P')
         {
             printf("\x1b[31mComando invalido! Use W, A, S ou D.\x1b[0m\n");
-            tocarSomErro();
+            //tocarSomErro();
             continue;            
         }        
 
@@ -220,6 +222,7 @@ int main()
         else if (comando == 'S')    novoX++;
         else if (comando == 'A')    novoY--;
         else if (comando == 'D')    novoY++;
+        else if (comando == 'P')    break; // Sair do jogo
         else                        printf("Comando invalido!\n");
 
         int movimentoValido = validarMovimento(novoX, novoY, labirinto);
@@ -236,25 +239,25 @@ int main()
             printf("\x1b[31mMovimento invalido! Parede ou fora dos limites!\x1b[0m\n");
             printf("\x1b[31mPerdeu 5 pontos :(\x1b[0m\n");
             tocarSomErro();
-            pontos -= 5;
+            pontos += 15;
         }
         else if (movimentoValido == 2)
         {
             x = 0;
             y = 0;
-            printf("\x1b[1;91mKABUMMMMMM!\x1b[0m\x1b[31m\nPerdeu 200 pontos! e voltou para a posição inicial.\x1b[0m\n");
+            printf("\x1b[1;91mKABUMMMMMM!\x1b[0m\x1b[31m\nPerdeu 250 pontos! e voltou para a posicao inicial.\x1b[0m\n");
             tocarSomBomba();
             labirinto[novoX][novoY] = 3; // Remove a bomba após cair nela
-            pontos -= 200;
+            pontos += 250;
         }
         else if (movimentoValido == 3)
         {
-            printf("\x1b[31mCaiu em um buraco! Fim de jogo!\x1b[0m\n");
+            printf("\n\x1b[31mCaiu em um buraco! Game Over!\x1b[0m\n");
             tocarSomBuraco();
-            printf("Total de pontos: %d\n", pontos);
+            //printf("Total de pontos: %d\n", pontos);
             break;
         }
-        
+        movimentos++;
     }
 
     return 0;
