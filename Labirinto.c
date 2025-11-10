@@ -73,6 +73,7 @@ navegar.
 #include <stdlib.h>  // Para system (limpar tela)
 #include <ctype.h>   // Para toupper (converter comandos)
 #include <windows.h> //Para beep
+#include <conio.h>   // Para getch (ler tecla sem enter)
 
 #define N 10 // Tamanho da matriz do labirinto
 
