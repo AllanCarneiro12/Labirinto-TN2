@@ -94,6 +94,7 @@ void mostrarLabirinto(int matriz[N][N], int x, int y, int pontos)
             if (i == x && j == y)           printf("\x1b[33m:)\x1b[0m"); // Jogador
             else if (matriz[i][j] == 1)     printf("\x1b[31mX\x1b[0m "); // Parede
             else if (matriz[i][j] == -1)    printf("\x1b[32m[]\x1b[0m"); // Saída
+            else if (matriz[i][j] == 3)     printf("\x1b[38;5;208m@\x1b[0m "); // buraco
             else                            printf("\x1b[34m.\x1b[0m "); // Caminho
         }
         printf("\n");
@@ -105,14 +106,12 @@ void mostrarLabirinto(int matriz[N][N], int x, int y, int pontos)
 // Validar movimento
 int validarMovimento(int novoX, int novoY, int matriz[N][N])
 {
-    if (novoX >= 0 && novoX < N && novoY >= 0 && novoY < N && matriz[novoX][novoY] != 1)
-    {
-        return 0;
-    }
-    else
-    {
-        return 1;
-    }
+    int dentroDosLimites = (novoX >= 0 && novoX < N && novoY >= 0 && novoY < N);
+
+    if (dentroDosLimites && (matriz[novoX][novoY] == 0 || matriz[novoX][novoY] == -1))  return 0;
+    else if (dentroDosLimites && matriz[novoX][novoY] == 2)                             return 2; // Bomba
+    else if (dentroDosLimites && matriz[novoX][novoY] == 3)                             return 3; // Buraco
+    else                                                                                return 1; // Parede ou fora dos limites
 }
 
 // tocar som
@@ -145,6 +144,21 @@ void tocarSomErro()
     Beep(250, 100);
     Sleep(300);
 }
+void tocarSomBomba()
+{
+    Beep(200, 300);
+    Sleep(100);
+    Beep(150, 300);
+    Sleep(100);
+    Beep(100, 500);
+    Sleep(500);
+}
+void tocarSomBuraco()
+{
+    Beep(300, 300);
+    Beep(200, 400);
+    Beep(100, 600);
+}
 
 //-------------------------------------MAIN-----------------------------------------
 
@@ -153,15 +167,15 @@ int main()
     // Matriz do labirinto: 0 = caminho, 1 = parede, -1 = saída
     int labirinto[N][N] =
         {
-            {0, 1, 0, 0, 1, 0, 0, 0, 0, 0},
+            {0, 1, 0, 0, 2, 0, 0, 0, 0, 0},
             {0, 1, 0, 1, 1, 0, 1, 0, 1, 0},
             {0, 0, 0, 1, 0, 0, 1, 0, 1, 0},
             {1, 1, 0, 1, 0, 1, 1, 0, 1, 1},
-            {0, 1, 0, 1, 0, 0, 1, 0, 0, 0},
+            {0, 1, 0, 1, 0, 0, 2, 0, 0, 0},
             {0, 0, 0, 0, 0, 1, 1, 1, 1, 0},
-            {0, 1, 1, 1, 0, 0, 0, 0, 0, 0},
-            {0, 1, 0, 1, 0, 1, 0, 1, 1, 0},
-            {0, 1, 0, 1, 0, 1, 0, 0, 0, 1},
+            {0, 1, 1, 1, 0, 2, 0, 0, 0, 0},
+            {0, 1, 0, 2, 0, 1, 0, 1, 1, 0},
+            {0, 1, 0, 1, 0, 0, 0, 0, 0, 1},
             {0, 0, 0, 1, 1, 1, 1, 1, 0, -1}};
 
     int x = 0, y = 0; // Posição inicial do jogador
@@ -208,20 +222,39 @@ int main()
         else if (comando == 'D')    novoY++;
         else                        printf("Comando invalido!\n");
 
-        if (validarMovimento(novoX, novoY, labirinto) == 0)
+        int movimentoValido = validarMovimento(novoX, novoY, labirinto);
+
+        if (movimentoValido == 0)
         {
             x = novoX;
             y = novoY;
             tocarSomMovimento();
             pontos += 10;
         }
-        else
+        else if (movimentoValido == 1)
         {
             printf("\x1b[31mMovimento invalido! Parede ou fora dos limites!\x1b[0m\n");
             printf("\x1b[31mPerdeu 5 pontos :(\x1b[0m\n");
             tocarSomErro();
             pontos -= 5;
         }
+        else if (movimentoValido == 2)
+        {
+            x = 0;
+            y = 0;
+            printf("\x1b[1;91mKABUMMMMMM!\x1b[0m\x1b[31m\nPerdeu 200 pontos! e voltou para a posição inicial.\x1b[0m\n");
+            tocarSomBomba();
+            labirinto[novoX][novoY] = 3; // Remove a bomba após cair nela
+            pontos -= 200;
+        }
+        else if (movimentoValido == 3)
+        {
+            printf("\x1b[31mCaiu em um buraco! Fim de jogo!\x1b[0m\n");
+            tocarSomBuraco();
+            printf("Total de pontos: %d\n", pontos);
+            break;
+        }
+        
     }
 
     return 0;
